@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+
+   traefik:
+      image: traefik:v1.7.13
+      container_name: traefik
+      command: --api --docker
+      restart: always
+      networks:
+         - default
+      ports:
+         - "80:80"
+         - "443:443"
+         - "8080:8080"
+      volumes:
+         - /var/run/docker.sock:/var/run/docker.sock
+         - ./traefik.toml:/etc/traefik/traefik.toml
+         - ./rules_external.toml:/etc/traefik/rules_external.toml
+         - ./ssl/acme.json:/acme.json
+         - ./logs/access.log:/access.log
+      labels:
+         - "traefik.enable=false"
+         - "traefik.disable=true"
+
+   whoami:
+    image: containous/whoami
+    labels:
+      - traefik.frontend.rule=Host:whoami.example.com 
+    networks:
+     - default

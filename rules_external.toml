@@ -1,0 +1,29 @@
+#
+# Webs externas
+#
+#[backends]
+#  [backends.proxmox]
+#    [backends.proxmox.servers.server1]
+#     url = "https://10.100.100.1:8006"
+#
+#  [backends.fake]
+#    [backends.fake.servers.server2]
+#      url="http://1.2.3.4"
+#
+#[frontends]
+#  [frontends.proxmox]
+#   backend = "proxmox"
+#   passHostHeader = true
+#   entrypoints = ["http", "https"]
+#    [frontends.proxmox.routes.route_1]
+#     rule = "Host:pve.patacuack.net"
+# 
+# # Redirección http (302)
+#  [frontends.webmail_kingstudio]
+#    backend = "fake"
+#    [frontends.webmail_kingstudio.routes.host]
+#      rule = "Host:webmail.kingstudio.es"
+#    [frontends.webmail_kingstudio.redirect]
+#      regex = "^https?://webmail.kingstudio.es/(.*)"
+#      replacement = "https://mailu.kingstudio.es"
+#      permanent = true

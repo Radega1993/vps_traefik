@@ -1,0 +1,139 @@
+# defaultEntryPoints must be at the top because it should not be in any table below
+defaultEntryPoints = ["http", "https"]
+
+#insecureSkipVerify = true
+
+################################################################
+# Traefik Web configuration backend
+################################################################
+[web]
+address = ":8080"
+
+################################################################
+# Docker configuration backend
+################################################################
+# Sample entrypoint configuration when using ACME.
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+[docker]
+domain = "example.com"
+watch = true
+exposedbydefault = false
+
+#
+# Webs externas
+#
+[file]
+filename = "/etc/traefik/rules_external.toml"
+
+# Enable ACME (Let's Encrypt): automatic SSL.
+[acme]
+
+# Email address used for registration.
+#
+# Required
+#
+email = "example@gmail.com"
+
+# File or key used for certificates storage.
+#
+# Required
+#
+storage = "acme.json"
+
+# or `storage = "traefik/acme/account"` if using KV store.
+
+# Entrypoint to proxy acme apply certificates to.
+# WARNING, if the TLS-SNI-01 challenge is used, it must point to an entrypoint on port 443
+#
+# Required
+#
+entryPoint = "https"
+
+# If true, display debug log messages from the acme client library.
+#
+# Optional
+# Default: false
+#
+acmeLogging = true
+
+# Enable certificate generation on frontends Host rules.
+#
+# Optional
+# Default: false
+#
+onHostRule = true
+onDemand = false
+
+# CA server to use.
+# - Uncomment the line to run on the staging let's encrypt server.
+# - Leave comment to go to prod.
+#
+# Optional
+# Default: "https://acme-v01.api.letsencrypt.org/directory"
+#
+# caServer = "https://acme-staging.api.letsencrypt.org/directory"
+
+# Domains list.
+#
+# [[acme.domains]]
+#   main = "local1.com"
+#   sans = ["test1.local1.com", "test2.local1.com"]
+# [[acme.domains]]
+#   main = "local2.com"
+#   sans = ["test1.local2.com", "test2.local2.com"]
+# [[acme.domains]]
+#   main = "local3.com"
+# [[acme.domains]]
+#   main = "local4.com"
+
+# [[acme.domains]]
+#   main = "mamuthack.com"
+
+
+# Use a HTTP-01 acme challenge rather than TLS-SNI-01 challenge
+#
+# Optional but recommend
+#
+[acme.httpChallenge]
+
+  # EntryPoint to use for the challenges.
+  #
+  # Required
+  #
+  entryPoint = "http"
+
+
+
+
+# Use a DNS-01 acme challenge rather than TLS-SNI-01 challenge
+#
+# Optional
+#
+# [acme.dnsChallenge]
+
+  # Provider used.
+  #
+  # Required
+  #
+  # provider = "digitalocean"
+
+  # By default, the provider will verify the TXT DNS challenge record before letting ACME verify.
+  # If delayBeforeCheck is greater than zero, avoid this & instead just wait so many seconds.
+  # Useful if internal networks block external DNS queries.
+  #
+  # Optional
+  # Default: 0
+  #
+  # delayBeforeCheck = 0
+  #
+[accessLog]
+  filePath = "/access.log"
+  bufferingSize = 10
