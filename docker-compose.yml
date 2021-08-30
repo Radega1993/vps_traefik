@@ -8,7 +8,7 @@ services:
       command: --api --docker
       restart: always
       networks:
-         - default
+         - web
       ports:
          - "80:80"
          - "443:443"
@@ -20,12 +20,17 @@ services:
          - ./ssl/acme.json:/acme.json
          - ./logs/access.log:/access.log
       labels:
-         - "traefik.enable=false"
-         - "traefik.disable=true"
+         - "traefik.frontend.rule=Host:traefik.petitstores.com"
+         - "traefik.port=8080"
+         - "traefik.enable=true"
 
    whoami:
     image: containous/whoami
     labels:
-      - traefik.frontend.rule=Host:whoami.example.com 
+      - traefik.frontend.rule=Host:whoami.petitstores.com 
     networks:
-     - default
+     - web
+
+networks:
+  web:
+    external: true

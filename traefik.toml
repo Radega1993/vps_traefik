@@ -23,7 +23,7 @@ address = ":8080"
     [entryPoints.https.tls]
 
 [docker]
-domain = "example.com"
+domain = "petitstores.com"
 watch = true
 exposedbydefault = false
 
@@ -40,7 +40,7 @@ filename = "/etc/traefik/rules_external.toml"
 #
 # Required
 #
-email = "example@gmail.com"
+email = "rauldearriba@gmail.com"
 
 # File or key used for certificates storage.
 #
